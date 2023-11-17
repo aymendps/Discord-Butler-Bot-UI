@@ -29,12 +29,6 @@ namespace Discord_Butler_Bot_UI
 
         void StartBotWorker(object? sender, DoWorkEventArgs e)
         {
-            this.Dispatcher.Invoke(() =>
-            {
-                StartBot.IsEnabled = false;
-                StartBot.Content = "Starting...";
-            });
-
             var process = App.GetBotProcess();
 
             while (!process.StandardOutput.EndOfStream)
@@ -51,18 +45,35 @@ namespace Discord_Butler_Bot_UI
             this.Dispatcher.Invoke(() =>
             {
                 StartBot.Content = "Stop";
-                StartBot.IsEnabled = true;
                 StartBot.Click -= StartBotClick;
+                StartBot.Click += StopBotClick;
+                StartBot.IsEnabled = true;
             });
         }
 
         private void StartBotClick(object sender, RoutedEventArgs e)
         {
+            StartBot.IsEnabled = false;
+            StartBot.Content = "Starting...";
+
             var worker = new BackgroundWorker();
             worker.DoWork += new DoWorkEventHandler(StartBotWorker);
             worker.RunWorkerAsync();
         }
 
+        private async void StopBotClick(object sender, RoutedEventArgs e)
+        {
+            StartBot.IsEnabled = false;
+            StartBot.Content = "Stopping...";
 
+            App.BotProcessExit();
+
+            await Task.Delay(5000);
+
+            StartBot.Content = "Start";
+            StartBot.Click -= StopBotClick;
+            StartBot.Click += StartBotClick;
+            StartBot.IsEnabled = true;
+        }
     }
 }

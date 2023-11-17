@@ -38,7 +38,7 @@ namespace Discord_Butler_Bot_UI
             return BotProcess;
         }
 
-        private void OnApplicationExit(object sender, ExitEventArgs e)
+        public static void BotProcessExit()
         {
             if (BotProcess != null && !BotProcess.HasExited)
             {
@@ -50,7 +50,13 @@ namespace Discord_Butler_Bot_UI
                 }
 
                 BotProcess.Kill();
+                BotProcess = null;
             }
+        }
+
+        private void OnApplicationExit(object sender, ExitEventArgs e)
+        {
+            BotProcessExit();
         }
     }
 }
