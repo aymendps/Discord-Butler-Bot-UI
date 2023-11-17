@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="Discord Butler Bot UI" Height="450" Width="800" Background="{StaticResource BgColor}" FontFamily="{StaticResource PrimaryFontFamily}">
     <Grid>
-        <Button Name="StartBot" Style="{StaticResource MainButton}" Content="Start Bot" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,25,0,0" Height="50" Width="150" Click="Start_Bot_Click"/>
+        <Button Name="StartBot" Style="{StaticResource MainButton}" Content="Start Bot" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,25,0,0" Height="50" Width="150" Click="StartBotClick"/>
     </Grid>
 </Window>

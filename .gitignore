@@ -11,7 +11,7 @@
 *.userprefs
 
 #Assets that are not yet confirmed
-ProjectCardDice/assets/ignore
+Discord Butler Bot UI/assets/ignore
 
 # Build results
 [Dd]ebug/

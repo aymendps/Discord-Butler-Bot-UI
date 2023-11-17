@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,10 +27,42 @@ namespace Discord_Butler_Bot_UI
             InitializeComponent();
         }
 
-        private void Start_Bot_Click(object sender, RoutedEventArgs e)
+        void StartBotWorker(object? sender, DoWorkEventArgs e)
         {
-            StartBot.IsEnabled = false;
-            StartBot.Content = "Starting...";
+            this.Dispatcher.Invoke(() =>
+            {
+                StartBot.IsEnabled = false;
+                StartBot.Content = "Starting...";
+            });
+
+            var process = App.GetBotProcess();
+
+            while (!process.StandardOutput.EndOfStream)
+            {
+                var line = process.StandardOutput.ReadLine();
+
+                if(BotEventManager.IsBotEvent(line, BotEvent.Started))
+                {
+                    Trace.WriteLine(line);
+                    break;
+                }
+            }
+
+            this.Dispatcher.Invoke(() =>
+            {
+                StartBot.Content = "Stop";
+                StartBot.IsEnabled = true;
+                StartBot.Click -= StartBotClick;
+            });
         }
+
+        private void StartBotClick(object sender, RoutedEventArgs e)
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += new DoWorkEventHandler(StartBotWorker);
+            worker.RunWorkerAsync();
+        }
+
+
     }
 }
