@@ -54,7 +54,7 @@ namespace Discord_Butler_Bot_UI
             }
         }
 
-        private void OnApplicationExit(object sender, ExitEventArgs e)
+        private void Application_Exit(object sender, ExitEventArgs e)
         {
             BotProcessExit();
         }

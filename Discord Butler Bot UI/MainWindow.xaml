@@ -5,8 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Discord_Butler_Bot_UI"
         mc:Ignorable="d"
-        Title="Discord Butler Bot UI" Height="450" Width="800" Background="{StaticResource BgColor}" FontFamily="{StaticResource PrimaryFontFamily}">
+        ResizeMode="NoResize"
+        Title="Discord Butler Bot UI" Height="475" Width="800" 
+        Background="{StaticResource BgColor}" FontFamily="{StaticResource PrimaryFontFamily}" FontSize="20"
+        >
     <Grid>
-        <Button Name="StartBot" Style="{StaticResource MainButton}" Content="Start Bot" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,25,0,0" Height="50" Width="150" Click="StartBotClick"/>
+        <Button Name="StartBotButton" Style="{StaticResource MainButton}" Content="Start Bot" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,361,0,0" Height="50" Width="150" Click="StartBotClick"/>
+        <TextBlock HorizontalAlignment="Left" Margin="189,364,0,0" TextWrapping="Wrap" Text="Status:" VerticalAlignment="Top" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <Grid Name="StatusOffline" Visibility="Visible">
+            <Ellipse HorizontalAlignment="Left" Height="8" Width="8" Margin="279,370,0,0" VerticalAlignment="Top" Fill="Red"/>
+            <TextBlock HorizontalAlignment="Left" Margin="241,366,0,0" TextWrapping="Wrap" Text="Offline" VerticalAlignment="Top" Foreground="Red" FontSize="12"/>
+        </Grid>
+        <Grid Name="StatusOnline" Visibility="Hidden">
+            <Ellipse HorizontalAlignment="Left" Height="8" Width="8" Margin="279,370,0,0" VerticalAlignment="Top" Fill="Green"/>
+            <TextBlock HorizontalAlignment="Left" Margin="241,366,0,0" TextWrapping="Wrap" Text="Online" VerticalAlignment="Top" Foreground="Green" FontSize="12"/>
+        </Grid>
+        <Grid Name="StatusLoading" Visibility="Hidden">
+            <Ellipse HorizontalAlignment="Left" Height="8" Width="8" Margin="288,370,0,0" VerticalAlignment="Top" Fill="LightGray"/>
+            <TextBlock HorizontalAlignment="Left" Margin="241,366,0,0" TextWrapping="Wrap" Text="Loading" VerticalAlignment="Top" Foreground="LightGray" FontSize="12"/>
+        </Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="190,388,0,0" TextWrapping="Wrap" Text="Running:" VerticalAlignment="Top" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <TextBlock Name="RunningTimeText" HorizontalAlignment="Left" Margin="254,390,0,0" TextWrapping="Wrap" Text="00:00:00" VerticalAlignment="Top" Foreground="{StaticResource PrimaryColor}" FontSize="12"/>
     </Grid>
 </Window>

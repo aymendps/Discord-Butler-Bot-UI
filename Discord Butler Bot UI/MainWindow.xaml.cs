@@ -22,12 +22,14 @@ namespace Discord_Butler_Bot_UI
     /// </summary>
     public partial class MainWindow : Window
     {
+        private BotRunningTimer _botRunningTimer;
         public MainWindow()
         {
             InitializeComponent();
+            _botRunningTimer = new BotRunningTimer(RunningTimeText);
         }
 
-        void StartBotWorker(object? sender, DoWorkEventArgs e)
+        private void StartBotWorker(object? sender, DoWorkEventArgs e)
         {
             var process = App.GetBotProcess();
 
@@ -44,17 +46,24 @@ namespace Discord_Butler_Bot_UI
 
             this.Dispatcher.Invoke(() =>
             {
-                StartBot.Content = "Stop";
-                StartBot.Click -= StartBotClick;
-                StartBot.Click += StopBotClick;
-                StartBot.IsEnabled = true;
+                StatusLoading.Visibility = Visibility.Hidden;
+                StatusOnline.Visibility = Visibility.Visible;
+
+                _botRunningTimer.Start();
+
+                StartBotButton.Content = "Stop";
+                StartBotButton.Click -= StartBotClick;
+                StartBotButton.Click += StopBotClick;
+                StartBotButton.IsEnabled = true;
             });
         }
 
         private void StartBotClick(object sender, RoutedEventArgs e)
         {
-            StartBot.IsEnabled = false;
-            StartBot.Content = "Starting...";
+            StartBotButton.IsEnabled = false;
+            StartBotButton.Content = "Starting...";
+            StatusOffline.Visibility = Visibility.Hidden;
+            StatusLoading.Visibility = Visibility.Visible;
 
             var worker = new BackgroundWorker();
             worker.DoWork += new DoWorkEventHandler(StartBotWorker);
@@ -63,17 +72,24 @@ namespace Discord_Butler_Bot_UI
 
         private async void StopBotClick(object sender, RoutedEventArgs e)
         {
-            StartBot.IsEnabled = false;
-            StartBot.Content = "Stopping...";
+            StartBotButton.IsEnabled = false;
+            StartBotButton.Content = "Stopping...";
+            StatusOnline.Visibility = Visibility.Hidden;
+            StatusLoading.Visibility = Visibility.Visible;
 
             App.BotProcessExit();
 
             await Task.Delay(5000);
 
-            StartBot.Content = "Start";
-            StartBot.Click -= StopBotClick;
-            StartBot.Click += StartBotClick;
-            StartBot.IsEnabled = true;
+            StatusLoading.Visibility = Visibility.Hidden;
+            StatusOffline.Visibility = Visibility.Visible;
+
+            _botRunningTimer.Stop();
+
+            StartBotButton.Content = "Start";
+            StartBotButton.Click -= StopBotClick;
+            StartBotButton.Click += StartBotClick;
+            StartBotButton.IsEnabled = true;
         }
     }
 }

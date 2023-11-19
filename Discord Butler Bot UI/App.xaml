@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Discord_Butler_Bot_UI"
              StartupUri="MainWindow.xaml"
-             Exit="OnApplicationExit">
+             Exit="Application_Exit">
     <Application.Resources>
         <SolidColorBrush x:Key="BgColor" Color="#121212"></SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryColor" Color="#BB86FC"></SolidColorBrush>
