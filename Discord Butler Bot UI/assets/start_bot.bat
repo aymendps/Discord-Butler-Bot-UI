@@ -1,0 +1,1 @@
+cd C:\Users\hamma\OneDrive\Bureau\Discord Butler\Discord-Butler-Bot && npm start

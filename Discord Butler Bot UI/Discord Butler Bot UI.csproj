@@ -6,6 +6,17 @@
     <RootNamespace>Discord_Butler_Bot_UI</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>False</UseWindowsForms>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="assets\start_bot.bat" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="assets\start_bot.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
 </Project>
