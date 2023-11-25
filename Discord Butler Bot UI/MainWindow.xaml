@@ -6,25 +6,38 @@
         xmlns:local="clr-namespace:Discord_Butler_Bot_UI"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Discord Butler Bot UI" Height="475" Width="800" 
+        Title="Discord Butler Bot UI" Height="600" Width="1000" 
         Background="{StaticResource BgColor}" FontFamily="{StaticResource PrimaryFontFamily}" FontSize="20"
         >
     <Grid>
-        <Button Name="StartBotButton" Style="{StaticResource MainButton}" Content="Start Bot" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,361,0,0" Height="50" Width="150" Click="StartBotClick"/>
-        <TextBlock HorizontalAlignment="Left" Margin="189,364,0,0" TextWrapping="Wrap" Text="Status:" VerticalAlignment="Top" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <Grid Name="StatusOffline" Visibility="Visible">
-            <Ellipse HorizontalAlignment="Left" Height="8" Width="8" Margin="279,370,0,0" VerticalAlignment="Top" Fill="Red"/>
-            <TextBlock HorizontalAlignment="Left" Margin="241,366,0,0" TextWrapping="Wrap" Text="Offline" VerticalAlignment="Top" Foreground="Red" FontSize="12"/>
+        <Border BorderBrush="{StaticResource PrimaryColor}" BorderThickness="2" Margin="20,20,20,90">
+            <Border BorderBrush="{StaticResource PrimaryColor}" BorderThickness="0, 0, 2, 0" Margin="0,0,260,0">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <Border BorderBrush="{StaticResource SecondaryColorHover}" BorderThickness="0,0,0,2" >
+                            <StackPanel Orientation="Horizontal" Height="80" Background="{StaticResource SecondaryColor}">
+                                <Rectangle Fill="Red" Width="10"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Border>
+        <Button Name="StartBotButton" Style="{StaticResource MainButton}" Content="Start Bot" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,361,0,20" Height="50" Width="150" Click="StartBotClick"/>
+        <TextBlock HorizontalAlignment="Left" Margin="189,364,0,48" TextWrapping="Wrap" Text="Status:" VerticalAlignment="Bottom" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <Grid Name="StatusOffline" Visibility="Visible" Margin="10,0,10,0">
+            <Ellipse HorizontalAlignment="Left" Height="8" Width="8" Margin="279,370,0,50.5" VerticalAlignment="Bottom" Fill="Red"/>
+            <TextBlock HorizontalAlignment="Left" Margin="241,366,0,48" TextWrapping="Wrap" Text="Offline" VerticalAlignment="Bottom" Foreground="Red" FontSize="12"/>
         </Grid>
         <Grid Name="StatusOnline" Visibility="Hidden">
-            <Ellipse HorizontalAlignment="Left" Height="8" Width="8" Margin="279,370,0,0" VerticalAlignment="Top" Fill="Green"/>
-            <TextBlock HorizontalAlignment="Left" Margin="241,366,0,0" TextWrapping="Wrap" Text="Online" VerticalAlignment="Top" Foreground="Green" FontSize="12"/>
+            <Ellipse HorizontalAlignment="Left" Height="8" Width="8" Margin="279,370,0,50.5" VerticalAlignment="Bottom" Fill="Green"/>
+            <TextBlock HorizontalAlignment="Left" Margin="241,366,0,48" TextWrapping="Wrap" Text="Online" VerticalAlignment="Bottom" Foreground="Green" FontSize="12"/>
         </Grid>
         <Grid Name="StatusLoading" Visibility="Hidden">
-            <Ellipse HorizontalAlignment="Left" Height="8" Width="8" Margin="288,370,0,0" VerticalAlignment="Top" Fill="LightGray"/>
-            <TextBlock HorizontalAlignment="Left" Margin="241,366,0,0" TextWrapping="Wrap" Text="Loading" VerticalAlignment="Top" Foreground="LightGray" FontSize="12"/>
+            <Ellipse HorizontalAlignment="Left" Height="8" Width="8" Margin="288,370,0,50.5" VerticalAlignment="Bottom" Fill="LightGray"/>
+            <TextBlock HorizontalAlignment="Left" Margin="241,366,0,48" TextWrapping="Wrap" Text="Loading" VerticalAlignment="Bottom" Foreground="LightGray" FontSize="12"/>
         </Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="190,388,0,0" TextWrapping="Wrap" Text="Running:" VerticalAlignment="Top" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <TextBlock Name="RunningTimeText" HorizontalAlignment="Left" Margin="254,390,0,0" TextWrapping="Wrap" Text="00:00:00" VerticalAlignment="Top" Foreground="{StaticResource PrimaryColor}" FontSize="12"/>
+        <TextBlock HorizontalAlignment="Left" Margin="190,388,0,25" TextWrapping="Wrap" Text="Running:" VerticalAlignment="Bottom" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <TextBlock Name="RunningTimeText" HorizontalAlignment="Left" Margin="254,390,0,25" TextWrapping="Wrap" Text="00:00:00" VerticalAlignment="Bottom" Foreground="{StaticResource PrimaryColor}" FontSize="12"/>
     </Grid>
 </Window>

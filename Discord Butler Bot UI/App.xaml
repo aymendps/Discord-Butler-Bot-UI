@@ -8,7 +8,8 @@
         <SolidColorBrush x:Key="BgColor" Color="#121212"></SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryColor" Color="#BB86FC"></SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryColorHover" Color="#A660FB"></SolidColorBrush>
-        <SolidColorBrush x:Key="SecondaryColor" Color="#3700B3"></SolidColorBrush>
+        <SolidColorBrush x:Key="SecondaryColor" Color="#FF0D002B"></SolidColorBrush>
+        <SolidColorBrush x:Key="SecondaryColorHover" Color="#FF1A0058"></SolidColorBrush>
         <FontFamily x:Key="PrimaryFontFamily">Roboto</FontFamily>
         
         <Style x:Key="MainButton" TargetType="{x:Type Button}">
