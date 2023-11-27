@@ -19,11 +19,14 @@ namespace Discord_Butler_Bot_UI
         public BotRunningTimer(TextBlock timerText)
         {
             _timerText = timerText;
+
+            // Create a timer with a one second interval.
             _timer = new DispatcherTimer();
             _timer.Tick += new EventHandler(UpdateBotRunningTime);
             _timer.Interval = new TimeSpan(0, 0, 1);
         }
 
+        // Increases the running time by one second then updates the timer text
         private void UpdateBotRunningTime(object? sender, EventArgs e)
         {
             _secondsRunning++;
@@ -35,16 +38,22 @@ namespace Discord_Butler_Bot_UI
             if (_minutesRunning >= 60)
             {
                 _minutesRunning = 0;
-                _hoursRunning++;
+                if (_hoursRunning < 99) _hoursRunning++;
             }
-            _timerText.Text = $"{_hoursRunning.ToString("00")}:{_minutesRunning.ToString("00")}:{_secondsRunning.ToString("00")}";
+            _timerText.Text = $"{_hoursRunning:00}:{_minutesRunning:00}:{_secondsRunning:00}";
         }
 
+        /// <summary>
+        /// Starts the timer
+        /// </summary>
         public void Start()
         {
             _timer.Start();
         }
 
+        /// <summary>
+        /// Stops the timer and resets the running time
+        /// </summary>
         public void Stop()
         {
             _timer.Stop();

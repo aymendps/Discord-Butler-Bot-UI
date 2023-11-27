@@ -14,49 +14,65 @@ namespace Discord_Butler_Bot_UI
     /// </summary>
     public partial class App : Application
     {
-        private static Process? BotProcess = null;
-
-        public static Process GetBotProcess()
+        // Singleton
+        private static Process? _botProcess = null;
+        /// <summary>
+        /// Singleton instance of the bot process
+        /// </summary>
+        public static Process BotProcessInstance
         {
-            if (BotProcess != null)
+            get
             {
-                Trace.WriteLine("Bot Process already started");
-                return BotProcess;
+                // If the process is already running, return it
+                if (_botProcess != null)
+                {
+                    Trace.WriteLine("Bot Process already started");
+                    return _botProcess;
+                }
+
+                // Otherwise, create then start the process
+                Trace.WriteLine("Starting Bot Process");
+                _botProcess = new Process();
+                _botProcess.StartInfo.FileName = ".\\Assets\\start_bot.bat";
+                _botProcess.StartInfo.RedirectStandardInput = true;
+                _botProcess.StartInfo.RedirectStandardOutput = true;
+                _botProcess.StartInfo.RedirectStandardError = true;
+                _botProcess.StartInfo.UseShellExecute = false;
+                _botProcess.StartInfo.CreateNoWindow = true;
+
+                _botProcess.Start();
+
+                return _botProcess;
             }
-
-            Trace.WriteLine("Starting Bot Process");
-            BotProcess = new Process();
-            BotProcess.StartInfo.FileName = ".\\assets\\start_bot.bat";
-            BotProcess.StartInfo.RedirectStandardInput = true;
-            BotProcess.StartInfo.RedirectStandardOutput = true;
-            BotProcess.StartInfo.RedirectStandardError = true;
-            BotProcess.StartInfo.UseShellExecute = false;
-            BotProcess.StartInfo.CreateNoWindow = true;
-         
-            BotProcess.Start();
-
-            return BotProcess;
         }
 
-        public static void BotProcessExit()
+        /// <summary>
+        /// Kills the bot process
+        /// </summary>
+        public static void ExitBotProcess()
         {
-            if (BotProcess != null && !BotProcess.HasExited)
+            if (_botProcess != null && !_botProcess.HasExited)
             {
                 Trace.WriteLine("Killing Bot Process");
 
+                // Bot process runs using Node.js, but is run through cmd.exe, so we don't have a direct reference to it
+                // Killing process instance even with children included won't kill the node processes
+                // Instead, we kill all node processes, which will kill the bot process
                 foreach (var node in Process.GetProcessesByName("node"))
                 {
                     node.Kill();
                 }
 
-                BotProcess.Kill();
-                BotProcess = null;
+                _botProcess.Kill();
+                _botProcess = null;
             }
         }
 
+        // Called when the application exits
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            BotProcessExit();
+            Trace.WriteLine("Application Exit");
+            ExitBotProcess();
         }
     }
 }
