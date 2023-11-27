@@ -27,37 +27,31 @@ namespace Discord_Butler_Bot_UI
         {
             InitializeComponent();
             _botRunningTimer = new BotRunningTimer(RunningTimeText);
+
+            // Subscribe to bot events
+            var instance = (App)Application.Current;
+            instance.OnBotEvent += HandleBotEvent;
         }
 
-        // Starts the bot process and waits for it to become online
-        private void StartBotWorker(object? sender, DoWorkEventArgs e)
+        // Handles bot events
+        private void HandleBotEvent(BotEvent botEvent)
         {
-            var process = App.BotProcessInstance;
-
-            while (!process.StandardOutput.EndOfStream)
+            if(botEvent == BotEvent.Online)
             {
-                var line = process.StandardOutput.ReadLine();
-
-                if(BotEventManager.IsBotEvent(line, BotEvent.Online))
+                // Update the UI to reflect the bot being online
+                this.Dispatcher.Invoke(() =>
                 {
-                    Trace.WriteLine(line);
-                    break;
-                }
+                    StatusLoading.Visibility = Visibility.Hidden;
+                    StatusOnline.Visibility = Visibility.Visible;
+
+                    _botRunningTimer.Start();
+
+                    StartBotButton.Content = "Stop";
+                    StartBotButton.Click -= StartBotClick;
+                    StartBotButton.Click += StopBotClick;
+                    StartBotButton.IsEnabled = true;
+                });
             }
-
-            // Update the UI to reflect the bot being online
-            this.Dispatcher.Invoke(() =>
-            {
-                StatusLoading.Visibility = Visibility.Hidden;
-                StatusOnline.Visibility = Visibility.Visible;
-
-                _botRunningTimer.Start();
-
-                StartBotButton.Content = "Stop";
-                StartBotButton.Click -= StartBotClick;
-                StartBotButton.Click += StopBotClick;
-                StartBotButton.IsEnabled = true;
-            });
         }
 
         // Handles clicking the start bot button
@@ -70,9 +64,8 @@ namespace Discord_Butler_Bot_UI
             StatusLoading.Visibility = Visibility.Visible;
 
             // Start the bot process
-            var worker = new BackgroundWorker();
-            worker.DoWork += new DoWorkEventHandler(StartBotWorker);
-            worker.RunWorkerAsync();
+            var instance = (App)Application.Current;
+            instance.StartBotProcess();
         }
 
         // Handles clicking the stop bot button
@@ -85,7 +78,8 @@ namespace Discord_Butler_Bot_UI
             StatusLoading.Visibility = Visibility.Visible;
 
             // Stop the bot process
-            App.ExitBotProcess();
+            var instance = (App)Application.Current;
+            instance.StopBotProcess();
 
             // Reset the UI after a few seconds
             await Task.Delay(5000);

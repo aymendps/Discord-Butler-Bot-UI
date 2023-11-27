@@ -41,7 +41,6 @@ namespace Discord_Butler_Bot_UI.UserControls
         public BotLog()
         {
             InitializeComponent();
-
         }
     }
 }
