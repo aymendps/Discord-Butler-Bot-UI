@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -14,43 +15,71 @@ namespace Discord_Butler_Bot_UI
     /// </summary>
     public partial class App : Application
     {
-        // Singleton
-        private static Process? _botProcess = null;
+        private Process? _botProcess = null;
+        private bool _botProcessIsRunning = false;
+
         /// <summary>
-        /// Singleton instance of the bot process
+        /// Event that is invoked when a bot event occurs
         /// </summary>
-        public static Process BotProcessInstance
+        public event Action<BotEvent> OnBotEvent;
+
+        private void InvokeOnBotEvent(BotEvent botEvent)
         {
-            get
+            OnBotEvent?.Invoke(botEvent);
+        }
+
+        // Background worker that runs the bot process and listens for its events
+        private void BotProcessBackgroundWorker(object? sender, DoWorkEventArgs e)
+        {
+            Trace.WriteLine("Starting Bot Process");
+
+            // Create process
+            _botProcess = new Process();
+            _botProcess.StartInfo.FileName = ".\\Assets\\start_bot.bat";
+            _botProcess.StartInfo.RedirectStandardInput = true;
+            _botProcess.StartInfo.RedirectStandardOutput = true;
+            _botProcess.StartInfo.RedirectStandardError = true;
+            _botProcess.StartInfo.UseShellExecute = false;
+            _botProcess.StartInfo.CreateNoWindow = true;
+
+            _botProcess.Start();
+
+            // When this is set back to false, the background worker will stop
+            _botProcessIsRunning = true;
+
+            // Listen for bot events
+            while (_botProcessIsRunning && !_botProcess.StandardOutput.EndOfStream)
             {
-                // If the process is already running, return it
-                if (_botProcess != null)
+                var line = _botProcess.StandardOutput.ReadLine();
+                var currentBotEvent = BotEventManager.GetBotEvent(line);
+
+                if(currentBotEvent != BotEvent.None)
                 {
-                    Trace.WriteLine("Bot Process already started");
-                    return _botProcess;
+                    InvokeOnBotEvent(currentBotEvent);
                 }
-
-                // Otherwise, create then start the process
-                Trace.WriteLine("Starting Bot Process");
-                _botProcess = new Process();
-                _botProcess.StartInfo.FileName = ".\\Assets\\start_bot.bat";
-                _botProcess.StartInfo.RedirectStandardInput = true;
-                _botProcess.StartInfo.RedirectStandardOutput = true;
-                _botProcess.StartInfo.RedirectStandardError = true;
-                _botProcess.StartInfo.UseShellExecute = false;
-                _botProcess.StartInfo.CreateNoWindow = true;
-
-                _botProcess.Start();
-
-                return _botProcess;
             }
+
+            Trace.WriteLine("Stopped Bot Process Background Worker");
+        }
+
+        /// <summary>
+        /// Starts the bot process in the background
+        /// </summary>
+        public void StartBotProcess()
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += new DoWorkEventHandler(BotProcessBackgroundWorker);
+            worker.RunWorkerAsync();
         }
 
         /// <summary>
         /// Kills the bot process
         /// </summary>
-        public static void ExitBotProcess()
+        public void StopBotProcess()
         {
+            // Setting this to false will stop the bot process background worker
+            _botProcessIsRunning = false;
+
             if (_botProcess != null && !_botProcess.HasExited)
             {
                 Trace.WriteLine("Killing Bot Process");
@@ -72,7 +101,7 @@ namespace Discord_Butler_Bot_UI
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             Trace.WriteLine("Application Exit");
-            ExitBotProcess();
+            StopBotProcess();
         }
     }
 }
