@@ -13,11 +13,9 @@
     <Grid>
         <Border BorderBrush="{StaticResource PrimaryColor}" BorderThickness="2" Margin="20,20,20,90">
             <Border BorderBrush="{StaticResource PrimaryColor}" BorderThickness="0, 0, 2, 0" Margin="0,0,260,0">
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-                        <TextBlock Name="LogPanelPlaceholder" Visibility="Visible" Foreground="LightGray" HorizontalAlignment="Stretch" Height="468" TextAlignment="Center" Padding="0, 220, 0, 0">
-                            Logs will appear here when the bot is running.
-                        </TextBlock>
+                <ScrollViewer Name="LogPanelScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Name="LogPanel">
+                        <TextBlock Name="LogPanelPlaceholder" Text="Logs will appear here when the bot is running." Foreground="LightGray" HorizontalAlignment="Stretch" Height="468" TextAlignment="Center" Padding="0, 220, 0, 0"/>
                     </StackPanel>
                 </ScrollViewer>
             </Border>

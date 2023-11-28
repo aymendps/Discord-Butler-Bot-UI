@@ -29,18 +29,10 @@ namespace Discord_Butler_Bot_UI.UserControls
             set { SetValue(StatusColorProperty, value); }
         }
 
-        public static readonly DependencyProperty LogDateTextProperty =
-            DependencyProperty.Register("LogDateText", typeof(string), typeof(BotLog), new PropertyMetadata(DateTime.Now.ToString("HH:mm:ss")));
-
-        public string LogDateText
-        {
-            get { return (string)GetValue(LogDateTextProperty); }
-            set { SetValue(LogDateTextProperty, value); }
-        }
-
         public BotLog()
         {
             InitializeComponent();
+            LogDate.Text = DateTime.Now.ToString("HH:mm:ss");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Discord_Butler_Bot_UI.UserControls;
+﻿using Discord_Butler_Bot_UI.BotEvents;
+using Discord_Butler_Bot_UI.UserControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -55,6 +56,67 @@ namespace Discord_Butler_Bot_UI
                     });
                     break;
 
+                case BotEvent.JoinedChannel:
+                case BotEvent.LeftChannel:
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        LogPanelPlaceholder.Visibility = Visibility.Collapsed;
+
+                        // Maybe builder pattern in the future?
+                        var log = new BotLog() { StatusColor = BotEventManager.BotEventToBrush(botEvent) };
+                        log.LogContent.Text = botEvent == BotEvent.JoinedChannel ? "Joined a voice channel" : "Left a voice channel";
+
+                        LogPanel.Children.Add(log);
+                        LogPanelScrollViewer.ScrollToBottom();
+                    });
+                    break;
+
+                case BotEvent.AddedSong:
+                    this.Dispatcher.Invoke(() => 
+                    {
+                        LogPanelPlaceholder.Visibility = Visibility.Collapsed;
+
+                        // Maybe builder pattern in the future?
+                        var log = new BotLog() { StatusColor = BotEventManager.BotEventToBrush(botEvent) };
+                        log.LogContent.Inlines.Add(new Run("Added "));
+                        log.LogContent.Inlines.Add(new Run("Some Song") { Foreground = FindResource("PrimaryColor") as SolidColorBrush});
+                        log.LogContent.Inlines.Add(new Run(" to the queue"));
+                        
+                        LogPanel.Children.Add(log);
+                        LogPanelScrollViewer.ScrollToBottom();
+                    });
+                    break;
+
+                case BotEvent.PlayingSong:
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        LogPanelPlaceholder.Visibility = Visibility.Collapsed;
+
+                        // Maybe builder pattern in the future?
+                        var log = new BotLog() { StatusColor = BotEventManager.BotEventToBrush(botEvent) };
+                        log.LogContent.Inlines.Add(new Run("Played "));
+                        log.LogContent.Inlines.Add(new Run("Some Song") { Foreground = FindResource("PrimaryColor") as SolidColorBrush });
+                        log.LogContent.Inlines.Add(new Run(" from the queue"));
+
+                        LogPanel.Children.Add(log);
+                        LogPanelScrollViewer.ScrollToBottom();
+                    });
+                    break;
+
+                case BotEvent.SkippedSong:
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        LogPanelPlaceholder.Visibility = Visibility.Collapsed;
+
+                        // Maybe builder pattern in the future?
+                        var log = new BotLog() { StatusColor = BotEventManager.BotEventToBrush(botEvent) };
+                        log.LogContent.Inlines.Add(new Run("Skipped "));
+                        log.LogContent.Inlines.Add(new Run("Some Song") { Foreground = FindResource("PrimaryColor") as SolidColorBrush });
+
+                        LogPanel.Children.Add(log);
+                        LogPanelScrollViewer.ScrollToBottom();
+                    });
+                    break;
             }
         }
 

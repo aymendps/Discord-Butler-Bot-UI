@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Windows.Media;
 
-namespace Discord_Butler_Bot_UI
+namespace Discord_Butler_Bot_UI.BotEvents
 {
     public enum BotEvent
     {
@@ -8,7 +9,7 @@ namespace Discord_Butler_Bot_UI
         JoinedChannel,
         LeftChannel,
         AddedSong,
-        PlayedSong,
+        PlayingSong,
         SkippedSong,
         None
     }
@@ -33,9 +34,9 @@ namespace Discord_Butler_Bot_UI
                 line = line.Substring(BOT_EVENT_PREFIX.Length);
 
                 // Loop through all bot events and check if the line starts with one of them
-                foreach(var botEvent in Enum.GetValues<BotEvent>())
+                foreach (var botEvent in Enum.GetValues<BotEvent>())
                 {
-                    if(line.StartsWith(botEvent.ToString()))
+                    if (line.StartsWith(botEvent.ToString()))
                     {
                         return botEvent;
                     }
@@ -43,6 +44,21 @@ namespace Discord_Butler_Bot_UI
             }
 
             return BotEvent.None;
+        }
+
+        public static Brush BotEventToBrush(BotEvent botEvent)
+        {
+            return botEvent switch
+            {
+                BotEvent.Online => Brushes.Green,
+                BotEvent.JoinedChannel => Brushes.LightGreen,
+                BotEvent.LeftChannel => Brushes.Pink,
+                BotEvent.AddedSong => Brushes.LightBlue,
+                BotEvent.PlayingSong => Brushes.Blue,
+                BotEvent.SkippedSong => Brushes.LightYellow,
+                BotEvent.None => Brushes.LightGray,
+                _ => Brushes.LightGray,
+            };
         }
     }
 }

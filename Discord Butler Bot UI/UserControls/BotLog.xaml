@@ -8,10 +8,10 @@
              d:DesignWidth="696"
              Name="UCBotLog">
     <Border BorderBrush="{StaticResource SecondaryColorHover}" BorderThickness="0,0,0,2" >
-        <StackPanel Orientation="Horizontal" Height="80" Background="{StaticResource SecondaryColor}">
+        <StackPanel Orientation="Horizontal" Height="80" Style="{StaticResource BotLogContainer}">
             <Rectangle Name="StatusBar" Fill="{Binding StatusColor, ElementName=UCBotLog}" d:Fill="LightGray" Width="10"/>
-            <TextBlock Name="LogContent" d:Text="Content of the log here!" VerticalAlignment="Center" Margin="20,0,0,0" Width="529" FontSize="20" Foreground="White" TextTrimming="WordEllipsis" TextWrapping="NoWrap"></TextBlock>
-            <TextBlock Name="LogDate" Text="{Binding LogDateText, ElementName=UCBotLog}" d:Text="00:00:00" VerticalAlignment="Center" Margin="30,0,0,0" FontSize="20" Foreground="LightGray"/>
+            <TextBlock Name="LogContent" d:Text="Content of the log here!" VerticalAlignment="Center" Margin="20,0,0,0" Width="500" FontSize="20" Foreground="White" TextTrimming="WordEllipsis" TextWrapping="NoWrap"></TextBlock>
+            <TextBlock Name="LogDate" d:Text="00:00:00" VerticalAlignment="Center" Margin="30,0,0,0" FontSize="20" Foreground="LightGray"/>
         </StackPanel>
     </Border>
 </UserControl>
