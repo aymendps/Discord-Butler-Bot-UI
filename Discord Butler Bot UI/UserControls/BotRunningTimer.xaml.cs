@@ -3,22 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace Discord_Butler_Bot_UI
+namespace Discord_Butler_Bot_UI.UserControls
 {
-    internal class BotRunningTimer
+    /// <summary>
+    /// Interaction logic for BotRunningTimer.xaml
+    /// </summary>
+    public partial class BotRunningTimer : UserControl
     {
-        private DispatcherTimer _timer;
+        private readonly DispatcherTimer _timer;
         private int _secondsRunning = 0;
         private int _minutesRunning = 0;
         private int _hoursRunning = 0;
-        private TextBlock _timerText;
 
-        public BotRunningTimer(TextBlock timerText)
+        public BotRunningTimer()
         {
-            _timerText = timerText;
+            InitializeComponent();
 
             // Create a timer with a one second interval.
             _timer = new DispatcherTimer();
@@ -40,7 +50,7 @@ namespace Discord_Butler_Bot_UI
                 _minutesRunning = 0;
                 if (_hoursRunning < 99) _hoursRunning++;
             }
-            _timerText.Text = $"{_hoursRunning:00}:{_minutesRunning:00}:{_secondsRunning:00}";
+            RunningTimeText.Text = $"{_hoursRunning:00}:{_minutesRunning:00}:{_secondsRunning:00}";
         }
 
         /// <summary>
@@ -60,7 +70,7 @@ namespace Discord_Butler_Bot_UI
             _secondsRunning = 0;
             _minutesRunning = 0;
             _hoursRunning = 0;
-            _timerText.Text = "00:00:00";
+            RunningTimeText.Text = "00:00:00";
         }
     }
 }

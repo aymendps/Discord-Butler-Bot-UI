@@ -1,0 +1,10 @@
+﻿<UserControl x:Class="Discord_Butler_Bot_UI.UserControls.BotRunningTimer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Discord_Butler_Bot_UI.UserControls"
+             mc:Ignorable="d"
+             Name="UCBotRunningTimer">
+    <TextBlock Name="RunningTimeText" Text="00:00:00" Foreground="{StaticResource PrimaryColor}" FontSize="{Binding FontSize, ElementName=UCBotRunningTimer}"/>
+</UserControl>
