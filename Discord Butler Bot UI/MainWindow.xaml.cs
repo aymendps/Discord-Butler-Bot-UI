@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Discord_Butler_Bot_UI.BotEvents;
+using Discord_Butler_Bot_UI.UserControls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -22,11 +24,9 @@ namespace Discord_Butler_Bot_UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly BotRunningTimer _botRunningTimer;
         public MainWindow()
         {
             InitializeComponent();
-            _botRunningTimer = new BotRunningTimer(RunningTimeText);
 
             // Subscribe to bot events
             var instance = (App)Application.Current;
@@ -36,21 +36,87 @@ namespace Discord_Butler_Bot_UI
         // Handles bot events
         private void HandleBotEvent(BotEvent botEvent)
         {
-            if(botEvent == BotEvent.Online)
+            switch(botEvent)
             {
-                // Update the UI to reflect the bot being online
-                this.Dispatcher.Invoke(() =>
-                {
-                    StatusLoading.Visibility = Visibility.Hidden;
-                    StatusOnline.Visibility = Visibility.Visible;
+                case BotEvent.Online:
+                    // Update the UI to reflect the bot being online
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        StatusLoading.Visibility = Visibility.Hidden;
+                        StatusOnline.Visibility = Visibility.Visible;
 
-                    _botRunningTimer.Start();
+                        RunningTimer.Start();
 
-                    StartBotButton.Content = "Stop";
-                    StartBotButton.Click -= StartBotClick;
-                    StartBotButton.Click += StopBotClick;
-                    StartBotButton.IsEnabled = true;
-                });
+                        StartBotButton.Content = "Stop";
+                        StartBotButton.Click -= StartBotClick;
+                        StartBotButton.Click += StopBotClick;
+                        StartBotButton.IsEnabled = true;
+
+                        LogPanelPlaceholder.Text = "Listening for bot logs...";
+                    });
+                    break;
+
+                case BotEvent.JoinedChannel:
+                case BotEvent.LeftChannel:
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        LogPanelPlaceholder.Visibility = Visibility.Collapsed;
+
+                        // Maybe builder pattern in the future?
+                        var log = new BotLog() { StatusColor = BotEventManager.BotEventToBrush(botEvent) };
+                        log.LogContent.Text = botEvent == BotEvent.JoinedChannel ? "Joined a voice channel" : "Left a voice channel";
+
+                        LogPanel.Children.Add(log);
+                        LogPanelScrollViewer.ScrollToBottom();
+                    });
+                    break;
+
+                case BotEvent.AddedSong:
+                    this.Dispatcher.Invoke(() => 
+                    {
+                        LogPanelPlaceholder.Visibility = Visibility.Collapsed;
+
+                        // Maybe builder pattern in the future?
+                        var log = new BotLog() { StatusColor = BotEventManager.BotEventToBrush(botEvent) };
+                        log.LogContent.Inlines.Add(new Run("Added "));
+                        log.LogContent.Inlines.Add(new Run("Some Song") { Foreground = FindResource("PrimaryColor") as SolidColorBrush});
+                        log.LogContent.Inlines.Add(new Run(" to the queue"));
+                        
+                        LogPanel.Children.Add(log);
+                        LogPanelScrollViewer.ScrollToBottom();
+                    });
+                    break;
+
+                case BotEvent.PlayingSong:
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        LogPanelPlaceholder.Visibility = Visibility.Collapsed;
+
+                        // Maybe builder pattern in the future?
+                        var log = new BotLog() { StatusColor = BotEventManager.BotEventToBrush(botEvent) };
+                        log.LogContent.Inlines.Add(new Run("Played "));
+                        log.LogContent.Inlines.Add(new Run("Some Song") { Foreground = FindResource("PrimaryColor") as SolidColorBrush });
+                        log.LogContent.Inlines.Add(new Run(" from the queue"));
+
+                        LogPanel.Children.Add(log);
+                        LogPanelScrollViewer.ScrollToBottom();
+                    });
+                    break;
+
+                case BotEvent.SkippedSong:
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        LogPanelPlaceholder.Visibility = Visibility.Collapsed;
+
+                        // Maybe builder pattern in the future?
+                        var log = new BotLog() { StatusColor = BotEventManager.BotEventToBrush(botEvent) };
+                        log.LogContent.Inlines.Add(new Run("Skipped "));
+                        log.LogContent.Inlines.Add(new Run("Some Song") { Foreground = FindResource("PrimaryColor") as SolidColorBrush });
+
+                        LogPanel.Children.Add(log);
+                        LogPanelScrollViewer.ScrollToBottom();
+                    });
+                    break;
             }
         }
 
@@ -87,12 +153,14 @@ namespace Discord_Butler_Bot_UI
             StatusLoading.Visibility = Visibility.Hidden;
             StatusOffline.Visibility = Visibility.Visible;
 
-            _botRunningTimer.Stop();
+            RunningTimer.Stop();
 
             StartBotButton.Content = "Start";
             StartBotButton.Click -= StopBotClick;
             StartBotButton.Click += StartBotClick;
             StartBotButton.IsEnabled = true;
+
+            LogPanelPlaceholder.Text = "Logs will appear here when the bot is running.";
         }
     }
 }

@@ -13,9 +13,9 @@
     <Grid>
         <Border BorderBrush="{StaticResource PrimaryColor}" BorderThickness="2" Margin="20,20,20,90">
             <Border BorderBrush="{StaticResource PrimaryColor}" BorderThickness="0, 0, 2, 0" Margin="0,0,260,0">
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-                        <uc:BotLog></uc:BotLog>
+                <ScrollViewer Name="LogPanelScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Name="LogPanel">
+                        <TextBlock Name="LogPanelPlaceholder" Text="Logs will appear here when the bot is running." Foreground="LightGray" HorizontalAlignment="Stretch" Height="468" TextAlignment="Center" Padding="0, 220, 0, 0"/>
                     </StackPanel>
                 </ScrollViewer>
             </Border>
@@ -35,6 +35,6 @@
             <TextBlock HorizontalAlignment="Left" Margin="241,366,0,48" TextWrapping="Wrap" Text="Loading" VerticalAlignment="Bottom" Foreground="LightGray" FontSize="12"/>
         </Grid>
         <TextBlock HorizontalAlignment="Left" Margin="190,388,0,25" TextWrapping="Wrap" Text="Running:" VerticalAlignment="Bottom" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <TextBlock Name="RunningTimeText" HorizontalAlignment="Left" Margin="254,390,0,25" TextWrapping="Wrap" Text="00:00:00" VerticalAlignment="Bottom" Foreground="{StaticResource PrimaryColor}" FontSize="12"/>
+        <uc:BotRunningTimer x:Name="RunningTimer" VerticalAlignment="Bottom" Margin="254,390,0,25" FontSize="12"/>
     </Grid>
 </Window>

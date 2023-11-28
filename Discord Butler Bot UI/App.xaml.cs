@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Discord_Butler_Bot_UI.BotEvents;
 
 namespace Discord_Butler_Bot_UI
 {
